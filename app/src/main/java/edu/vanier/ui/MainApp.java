@@ -4,19 +4,19 @@
  */
 package edu.vanier.ui;
 
-import edu.vanier.controllers.PCController;
-
+import edu.vanier.tests.Driver;
 /**
  *
  * @author 2125602
  */
 public class MainApp {
     
+    //-- TODO: Make comments into proper Javadoc comments
+    //-- For all action items: ctrl + 6
+    
     public static void main(String[] args) {
-        // Test things here for now, should be testing in Driver.java --> TODO
-        PCController controller = new PCController("/data/zipcodes.csv");
-        controller.parse();
-        controller.distanceTo("V4S", "E1G");
+        Driver d = new Driver();
+        d.main();
     }
     
 }

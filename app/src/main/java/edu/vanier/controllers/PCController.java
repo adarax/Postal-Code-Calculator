@@ -20,18 +20,26 @@ public class PCController {
     private HashMap<String, PostalCode> postalCodes;
     private final String csvFilePath;
     
-    
-    public PCController(String filePath) { // Constructor
+    //-- Constructor
+    public PCController(String filePath) {
         this.csvFilePath = filePath;
     }
     
-    
-    // @return HashMap<String, PostalCode object>
-    // The String key in the HashMap is the postal code its corresponding value
+   /** 
+    * The key in the HashMap is the postal code of its value
+    * @return HashMap<String, PostalCode object>
+    */
     public HashMap<String, PostalCode> parse() {
         
         try {
             String csvPath = getClass().getResource(csvFilePath).getPath();
+            
+            //-- Fix for paths where the name of one of the directories
+            //-- contains a "space" character
+            if (csvPath.contains("%20")) {
+                csvPath = csvPath.replace("%20", " ");
+            }
+            
             CSVReader reader = new CSVReaderBuilder(new FileReader(csvPath)).build();
             String[] nextLine;
             postalCodes = new HashMap<>();
@@ -59,36 +67,40 @@ public class PCController {
                                """);
         }
         
-      System.out.println(postalCodes.get("V4S"));
-      System.out.println(postalCodes.get("E1G"));  
-
       return postalCodes;
     }
     
     
-    // TODO: FIX HAVERSINE
-    
-    // Takes two postal codes, finds corresponding coords
-    // Uses Haversine formula
-    // @return distance (in KM)
+   /** 
+    * Takes two postal codes, finds corresponding coordinates, converts to rads
+    * Uses Haversine formula
+    * @param from
+    * @param to
+    * @return dist : distance between two points in km
+    */
     public double distanceTo(String from, String to) {
         
         int radiusOfEarth = 6371;
         
-        double latitudeStart = Math.toRadians(postalCodes.get(from).getLatitude());
-        double latitudeEnd = Math.toRadians(postalCodes.get(to).getLatitude());
-        double longitudeStart = Math.toRadians(postalCodes.get(from).getLongitude());
-        double longitudeEnd = Math.toRadians(postalCodes.get(to).getLongitude());
+        double lat1 = Math.toRadians(postalCodes.get(from).getLatitude()),
+               lat2 = Math.toRadians(postalCodes.get(to).getLatitude()),
+               long1 = Math.toRadians(postalCodes.get(from).getLongitude()),
+               long2 = Math.toRadians(postalCodes.get(to).getLongitude());
         
-        double distanceBetweenPoints = 2 * radiusOfEarth
-                * Math.asin(Math.sqrt(Math.pow(
-                  Math.sin((latitudeEnd - latitudeStart) / 2), 2))
-                + Math.cos(longitudeStart)
-                * Math.cos(longitudeEnd)
-                * Math.pow(Math.sin((longitudeEnd - longitudeStart) / 2), 2));
-        System.out.println(distanceBetweenPoints);
-        return distanceBetweenPoints; // Round?
+        double dist = 2 * radiusOfEarth * 
+                Math.asin(Math.sqrt(Math.pow(Math.sin((lat2 - lat1) / 2), 2)
+                + Math.cos(lat1) * Math.cos(lat2)
+                * Math.pow(Math.sin((long2 - long1) / 2), 2)));
+        
+       /**
+        * Rounded dist to 2 decimal places   
+        * To round: Math.round(dist * 10^n) / 10^n where "n" is the
+          number of decimal places.
+        * Type cast to double to keep the decimals.
+        */
+        return dist;
     }
+    
     
     public HashMap<String, PostalCode> nearbyLocations(String from) {
         

@@ -28,7 +28,7 @@ public class MainApp extends Application {
         VBox root = new VBox();
         
         //-----------
-        //TODO:| Create your Scene graph here.
+        //TODO: Create your Scene graph here.
         //-----------       
         //FIXME: ask me in class what FIXME is supposed to mean.
         //-----
