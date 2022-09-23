@@ -11,6 +11,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  *
@@ -102,8 +103,18 @@ public class PCController {
     }
     
     
+    //-- @return nearby locations, HashMap<String, PostalCode>
     public HashMap<String, PostalCode> nearbyLocations(String from) {
+        //-- Nearby PostalCode objects (within 100km)
+        HashMap<String, PostalCode> nearbyLocations = new HashMap<>();
         
-        return null;
+        for (Map.Entry<String, PostalCode> entry : postalCodes.entrySet()) {
+            if (distanceTo(from, entry.getValue().getPostalCode()) <= 100) {
+                nearbyLocations.put(entry.getKey(), entry.getValue());
+            }
+        }
+        
+        return nearbyLocations;
     }
+    
 }

@@ -12,6 +12,7 @@ import edu.vanier.models.PostalCode;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -24,7 +25,11 @@ public class Driver {
     
     public void main() {
         testParse("/data/zipcodes.csv");
-        testDistanceTo("H4R", "H3X");
+//        testDistanceTo("H4R", "H3X");
+        pcController = new PCController("/data/zipcodes.csv");
+        pcController.parse(); // To fill the postalCodes HashMap
+                              // so that testNearbyLocations can be used
+        testNearbyLocations("H3X");
     }
     
     public void testParse(String filePath) {
@@ -66,7 +71,7 @@ public class Driver {
          
     }
     
-    //-- @return distance between points in kilometers
+    //-- @return distance between points in kilometers, double
     public void testDistanceTo(String from, String to) {
         
         int radiusOfEarth = 6371;
@@ -90,8 +95,20 @@ public class Driver {
         System.out.println((double) Math.round(dist * 100) / 100 + "km");
     }
     
+    
+    //-- @return nearby locations, HashMap<String, PostalCode>
     public void testNearbyLocations(String from) {
         
+        //-- Nearby PostalCode objects (within 100km)
+        HashMap<String, PostalCode> nearbyLocations = new HashMap<>();
+        
+        for (Map.Entry<String, PostalCode> entry : postalCodes.entrySet()) {
+            if (pcController.distanceTo(from, entry.getValue().getPostalCode()) <= 100) {
+                nearbyLocations.put(entry.getKey(), entry.getValue());
+            }
+        }
+        
+        System.out.println(nearbyLocations);
     }
     
 }
