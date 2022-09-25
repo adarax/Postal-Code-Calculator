@@ -4,19 +4,41 @@
  */
 package edu.vanier.ui;
 
-import edu.vanier.tests.Driver;
+import edu.vanier.controllers.MainWindowController;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 /**
  *
  * @author 2125602
  */
-public class MainApp {
+public class MainApp extends Application {
     
     //-- TODO: Make comments into proper Javadoc comments
     //-- For all action items: ctrl + 6
     
+    // For all user input, need data validation (both of type and existence
+    // in the HashMap)
+    
+    @Override
+    public void start(Stage stage) throws Exception {
+        
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main_window.fxml"));
+        MainWindowController controller = new MainWindowController();
+        loader.setController(controller);
+        Pane root = loader.load();
+        Scene scene = new Scene(root, 600, 500);
+        stage.setScene(scene);
+        stage.setTitle("Postal Code Calculator");
+        stage.sizeToScene();
+        stage.show();
+    }
+    
+    
     public static void main(String[] args) {
-        Driver d = new Driver();
-        d.main();
+        launch(args);
     }
     
 }
