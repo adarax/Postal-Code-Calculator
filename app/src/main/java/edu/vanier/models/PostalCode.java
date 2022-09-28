@@ -13,9 +13,6 @@ public class PostalCode {
     private String country, postalCode, province;
     private double latitude, longitude;
     
-    // Store all data for entry
-    // City doesn't matter for bad data, just postal code & coords
-    // Store all city data as one var (and display will just be a bit odd ig)
 
     public PostalCode(int id, String country, String postalCode, String province, double latitude, double longitude) {
         this.id = id;

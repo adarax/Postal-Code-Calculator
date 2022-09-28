@@ -24,13 +24,14 @@ public class PCController {
     //-- Constructor
     public PCController(String filePath) {
         this.csvFilePath = filePath;
+        parse();
     }
     
    /** 
     * The key in the HashMap is the postal code of its value
     * @return HashMap<String, PostalCode object>
     */
-    public HashMap<String, PostalCode> parse() {
+    public final HashMap<String, PostalCode> parse() {
         
         try {
             String csvPath = getClass().getResource(csvFilePath).getPath();
@@ -79,7 +80,7 @@ public class PCController {
     * @param to
     * @return dist : distance between two points in km
     */
-    public double distanceTo(String from, String to) {
+    public final double distanceTo(String from, String to) {
         
         int radiusOfEarth = 6371;
         
@@ -99,17 +100,20 @@ public class PCController {
           number of decimal places.
         * Type cast to double to keep the decimals.
         */
-        return dist;
+        return (double) Math.round(dist * 100) / 100;
     }
     
-    
-    //-- @return nearby locations, HashMap<String, PostalCode>
-    public HashMap<String, PostalCode> nearbyLocations(String from) {
+    /**
+     * @param from : first 3 characters of postal code
+     * @param radius : radius (KM) in which to search
+     * @return HashMap<String, PostalCode> : HashMap of nearby locations
+     */
+    public final HashMap<String, PostalCode> nearbyLocations(String from, double radius) {
         //-- Nearby PostalCode objects (within 100km)
         HashMap<String, PostalCode> nearbyLocations = new HashMap<>();
         
         for (Map.Entry<String, PostalCode> entry : postalCodes.entrySet()) {
-            if (distanceTo(from, entry.getValue().getPostalCode()) <= 100) {
+            if (distanceTo(from, entry.getValue().getPostalCode()) <= radius) {
                 nearbyLocations.put(entry.getKey(), entry.getValue());
             }
         }
