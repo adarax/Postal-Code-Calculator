@@ -114,7 +114,9 @@ public class PCController {
         
         for (Map.Entry<String, PostalCode> entry : postalCodes.entrySet()) {
             if (distanceTo(from, entry.getValue().getPostalCode()) <= radius) {
-                nearbyLocations.put(entry.getKey(), entry.getValue());
+                if (entry.getValue() != postalCodes.get(from)) {
+                    nearbyLocations.put(entry.getKey(), entry.getValue());
+                }
             }
         }
         
