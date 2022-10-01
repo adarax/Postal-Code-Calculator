@@ -19,9 +19,6 @@ public class MainApp extends Application {
     //-- TODO: Make comments into proper Javadoc comments
     //-- For all action items: ctrl + 6
     
-    // For all user input, need data validation (both of type and existence
-    // in the HashMap)
-    
     @Override
     public void start(Stage stage) throws Exception {
         

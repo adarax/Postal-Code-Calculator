@@ -29,7 +29,7 @@ public class Driver {
         pcController = new PCController("/data/zipcodes.csv");
         pcController.parse(); // To fill the postalCodes HashMap
                               // so that testNearbyLocations can be used
-        testNearbyLocations("H3X");
+        testNearbyLocations("H3X", 100);
     }
     
     public void testParse(String filePath) {
@@ -97,13 +97,13 @@ public class Driver {
     
     
     //-- @return nearby locations, HashMap<String, PostalCode>
-    public void testNearbyLocations(String from) {
+    public void testNearbyLocations(String from, double radius) {
         
         //-- Nearby PostalCode objects (within 100km)
         HashMap<String, PostalCode> nearbyLocations = new HashMap<>();
         
         for (Map.Entry<String, PostalCode> entry : postalCodes.entrySet()) {
-            if (pcController.distanceTo(from, entry.getValue().getPostalCode()) <= 100) {
+            if (pcController.distanceTo(from, entry.getValue().getPostalCode()) <= radius) {
                 nearbyLocations.put(entry.getKey(), entry.getValue());
             }
         }
