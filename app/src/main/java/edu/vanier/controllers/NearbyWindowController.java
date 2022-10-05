@@ -16,6 +16,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -41,6 +42,8 @@ public class NearbyWindowController extends Stage {
         find_button.setOnAction((e) -> {
             PCController pcController = new PCController("/data/zipcodes.csv");
             
+            // TODO: issue with using the method multiple times without restarting application
+            
             try {
                 String startPoint = pc_input_field.getText().toUpperCase().trim();
                 double radius = Double.parseDouble(radius_input_field.getText());
@@ -52,7 +55,7 @@ public class NearbyWindowController extends Stage {
                 
                 displayTableView(nearbyLocations);
                 
-//                System.out.println(nearbyLocations + " in a radius of " + radius + " KM");
+                System.out.println(nearbyLocations + " in a radius of " + radius + " KM");
                 
            }
            catch (NumberFormatException ex) {
@@ -83,7 +86,8 @@ public class NearbyWindowController extends Stage {
         Label label = new Label("Found locations");
         label.setFont(new Font(20));
 
-        TableColumn country = new TableColumn("Country");
+        TableColumn<PostalCode, String> country = new TableColumn<>("Country");
+        country.setCellValueFactory(new PropertyValueFactory("country"));
         TableColumn postalCode = new TableColumn("Postal Code");
         TableColumn province = new TableColumn("Province");
         TableColumn latitude = new TableColumn("Latitude");
