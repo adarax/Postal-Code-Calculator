@@ -6,6 +6,8 @@ package edu.vanier.controllers;
 
 import edu.vanier.models.PostalCode;
 import java.util.HashMap;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -53,23 +55,19 @@ public class NearbyWindowController extends Stage {
                 HashMap<String, PostalCode> nearbyLocations = pcController.nearbyLocations(startPoint, radius);
                 error_message.setText("");
                 
-<<<<<<< HEAD
-                // TODO: implement TableView for search results
-                // TODO: don't include itself in the search
-                System.out.println(nearbyLocations + " in a radius of " + radius + " KM");
-=======
                 displayTableView(nearbyLocations);
->>>>>>> f24aa05e7f4eb0234f5196bab7ef1e61b58b47d9
                 
-                System.out.println(nearbyLocations + " in a radius of " + radius + " KM");
-                
+//                System.out.println(nearbyLocations + " in a radius of " + radius + " KM");    
            }
            catch (NumberFormatException ex) {
                error_message.setText("Invalid radius value, please retry.");
+               ex.printStackTrace();
            }
            catch (Exception ex) {
-                error_message.setText("Invalid postal code or radius value, please retry."
-                    + "\nTip: Enter only the first 3 characters of the postal code");
+               error_message.setText("Invalid postal code or radius value, please retry."
+                   + "\nTip: Enter only the first 3 characters of the postal code");
+                
+               ex.printStackTrace();
            }
         });
     }
@@ -95,12 +93,26 @@ public class NearbyWindowController extends Stage {
         TableColumn<PostalCode, String> country = new TableColumn<>("Country");
         country.setCellValueFactory(new PropertyValueFactory("country"));
         TableColumn postalCode = new TableColumn("Postal Code");
+        postalCode.setCellValueFactory(new PropertyValueFactory("postalCode"));
         TableColumn province = new TableColumn("Province");
+        province.setCellValueFactory(new PropertyValueFactory("province"));
         TableColumn latitude = new TableColumn("Latitude");
+        latitude.setCellValueFactory(new PropertyValueFactory("latitude"));
         TableColumn longitude = new TableColumn("Longitude");
+        longitude.setCellValueFactory(new PropertyValueFactory("longitude"));
+
 
         table.getColumns().addAll(country, province, postalCode, latitude, longitude);
-
+        
+        ObservableList<PostalCode> ol = FXCollections.observableArrayList();
+        
+        // TODO: add all values of searchResults HashMap
+        
+//        ol.add();
+        
+        // Test
+        System.out.println(ol);
+        
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10, 10, 10, 10));
         vbox.getChildren().addAll(label, table);
