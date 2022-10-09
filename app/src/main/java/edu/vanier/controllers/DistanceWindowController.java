@@ -32,8 +32,8 @@ public class DistanceWindowController extends Stage {
             PCController pcController = new PCController("/data/zipcodes.csv");
             
             try {
-                String startPoint = start_field.getText().toUpperCase();
-                String endPoint = end_field.getText().toUpperCase();
+                String startPoint = start_field.getText().toUpperCase().trim();
+                String endPoint = end_field.getText().toUpperCase().trim();
                 double distance = pcController.distanceTo(startPoint, endPoint);
                 
                 error_message.setText("");

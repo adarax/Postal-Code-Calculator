@@ -109,12 +109,14 @@ public class PCController {
      * @return HashMap<String, PostalCode> : HashMap of nearby locations
      */
     public final HashMap<String, PostalCode> nearbyLocations(String from, double radius) {
-        //-- Nearby PostalCode objects (within 100km)
+        //-- Nearby PostalCode objects (within radius)
         HashMap<String, PostalCode> nearbyLocations = new HashMap<>();
         
         for (Map.Entry<String, PostalCode> entry : postalCodes.entrySet()) {
             if (distanceTo(from, entry.getValue().getPostalCode()) <= radius) {
-                nearbyLocations.put(entry.getKey(), entry.getValue());
+                if (entry.getValue() != postalCodes.get(from)) {
+                    nearbyLocations.put(entry.getKey(), entry.getValue());
+                }
             }
         }
         
