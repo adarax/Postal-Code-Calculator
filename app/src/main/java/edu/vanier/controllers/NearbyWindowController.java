@@ -38,7 +38,7 @@ public class NearbyWindowController {
                 error_message.setText("");
                 
                 // TODO: implement TableView for search results
-
+                // TODO: don't include itself in the search
                 System.out.println(nearbyLocations + " in a radius of " + radius + " KM");
                 
                 
