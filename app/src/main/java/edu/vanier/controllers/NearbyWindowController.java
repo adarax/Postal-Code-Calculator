@@ -30,6 +30,16 @@ import javafx.stage.Stage;
  */
 public class NearbyWindowController extends Stage {
     
+    private boolean modalityInitialized = false;
+
+    public boolean isModalityInitialized() {
+        return modalityInitialized;
+    }
+
+    public void setModalityInitialized(boolean modalityInitialized) {
+        this.modalityInitialized = modalityInitialized;
+    }
+    
     @FXML
     Button find_button;
     
@@ -44,8 +54,6 @@ public class NearbyWindowController extends Stage {
         find_button.setOnAction((e) -> {
             PCController pcController = new PCController("/data/zipcodes.csv");
             
-            // TODO: issue with using the method multiple times without restarting application
-            
             try {
                 String startPoint = pc_input_field.getText().toUpperCase().trim();
                 double radius = Double.parseDouble(radius_input_field.getText());
@@ -54,75 +62,76 @@ public class NearbyWindowController extends Stage {
                 }
                 HashMap<String, PostalCode> nearbyLocations = pcController.nearbyLocations(startPoint, radius);
                 error_message.setText("");
-                
-                displayTableView(nearbyLocations);
-                
-//                System.out.println(nearbyLocations + " in a radius of " + radius + " KM");    
-           }
-           catch (NumberFormatException ex) {
-               error_message.setText("Invalid radius value, please retry.");
-               ex.printStackTrace();
-           }
-           catch (Exception ex) {
-               error_message.setText("Invalid postal code or radius value, please retry."
-                   + "\nTip: Enter only the first 3 characters of the postal code");
-                
-               ex.printStackTrace();
-           }
+
+                displayTableView(nearbyLocations, radius, startPoint);
+
+            } catch (NumberFormatException ex) {
+                error_message.setText("Invalid radius value, please retry.");
+            } catch (Exception ex) {
+                error_message.setText("Invalid postal code or radius value, please retry."
+                    + "\nTip: Enter only the first 3 characters of the postal code");
+            }
         });
     }
     
-    public void displayTableView(HashMap<String, PostalCode> searchResults) {
-        // TODO: implement TableView for search results
+    public void displayTableView(HashMap<String, PostalCode> searchResults, double radius, String startPoint) {
         
-        //-- Table implemented
-        //-- Now need to add the search results line by line into the table
+        //-- TableView and Labels setup
+        TableView<PostalCode> table = new TableView<>();
         
-        // Add city column?
-
-        TableView table = new TableView();
-
-        Scene scene = new Scene(new Group());
-        this.setTitle("Nearby locations");
-        this.setWidth(300);
-        this.setHeight(500);
-
-        Label label = new Label("Found locations");
-        label.setFont(new Font(20));
-
+        Label label = new Label(searchResults.size() + " locations within "
+            + radius + " km of " + startPoint + ":");
+        label.setFont(new Font(18));
+        
+        Label placeholder = new Label();
+        placeholder.setText("No results found within this radius");
+        table.setPlaceholder(placeholder);
+        
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
         TableColumn<PostalCode, String> country = new TableColumn<>("Country");
-        country.setCellValueFactory(new PropertyValueFactory("country"));
-        TableColumn postalCode = new TableColumn("Postal Code");
-        postalCode.setCellValueFactory(new PropertyValueFactory("postalCode"));
-        TableColumn province = new TableColumn("Province");
-        province.setCellValueFactory(new PropertyValueFactory("province"));
-        TableColumn latitude = new TableColumn("Latitude");
-        latitude.setCellValueFactory(new PropertyValueFactory("latitude"));
-        TableColumn longitude = new TableColumn("Longitude");
-        longitude.setCellValueFactory(new PropertyValueFactory("longitude"));
+        country.setCellValueFactory(new PropertyValueFactory<>("country"));
+        
+        TableColumn<PostalCode, String> postalCode = new TableColumn<>("Postal Code");
+        postalCode.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        
+        TableColumn<PostalCode, String> province = new TableColumn<>("Province");
+        province.setCellValueFactory(new PropertyValueFactory<>("province"));
+        
+        TableColumn<PostalCode, String> latitude = new TableColumn<>("Latitude");
+        latitude.setCellValueFactory(new PropertyValueFactory<>("latitude"));
+        
+        TableColumn<PostalCode, String> longitude = new TableColumn<>("Longitude");
+        longitude.setCellValueFactory(new PropertyValueFactory<>("longitude"));
 
-
-        table.getColumns().addAll(country, province, postalCode, latitude, longitude);
+        ObservableList<PostalCode> ob = FXCollections.observableArrayList(searchResults.values());
+        table.setItems(ob);
         
-        ObservableList<PostalCode> ol = FXCollections.observableArrayList();
+        table.getColumns().addAll(country, postalCode, province, latitude, longitude);  
         
-        // TODO: add all values of searchResults HashMap
-        
-//        ol.add();
-        
-        // Test
-        System.out.println(ol);
+        //-- Scene setup
+        Scene scene = new Scene(new Group());
         
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(10, 10, 10, 10));
         vbox.getChildren().addAll(label, table);
 
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
-
+        
+        //-- Stage setup
+        this.setTitle("Nearby locations");
+        this.setWidth(300);
+        this.setHeight(500);
+        
+        //-- Using initModality() after calling this.show() causes an exception
+        if (!isModalityInitialized()) {
+            this.initModality(Modality.APPLICATION_MODAL);
+            setModalityInitialized(true);
+        }
+        
         this.sizeToScene();
         this.setResizable(false);
         this.setScene(scene);
-        this.initModality(Modality.APPLICATION_MODAL);
         this.show();
     }
 }

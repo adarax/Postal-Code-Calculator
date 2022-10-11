@@ -21,7 +21,6 @@ public class MainApp extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main_window.fxml"));
         MainWindowController controller = new MainWindowController();
         loader.setController(controller);
@@ -33,9 +32,7 @@ public class MainApp extends Application {
         stage.show();
     }
     
-    
     public static void main(String[] args) {
         launch(args);
     }
-    
 }
