@@ -27,6 +27,7 @@ public class MainWindowController extends Stage {
     
     @FXML
     public void initialize() {
+        //-- Call computeDistanceDialog() upon clicking "compute distance"
         compute_distance.setOnAction((e) -> {
             try {
                 computeDistanceDialog();
@@ -35,6 +36,7 @@ public class MainWindowController extends Stage {
             }
         });
 
+        //-- Call findNearbyDialog() upon clicking "find locations"
         find_locations.setOnAction((e) -> {
             try {
                 findNearbyDialog();
@@ -44,7 +46,7 @@ public class MainWindowController extends Stage {
         });
     }
     
-    
+    //-- Dialog for user to compute distance
     public void computeDistanceDialog() throws IOException {
         Stage computeDistanceStage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/compute_distance_window.fxml"));
@@ -59,6 +61,7 @@ public class MainWindowController extends Stage {
         computeDistanceStage.showAndWait();
     }
     
+    //-- Dialog for user to find nearby locations
     public void findNearbyDialog() throws IOException {
         Stage findNearbyStage = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/list_nearby_window.fxml"));
@@ -72,5 +75,4 @@ public class MainWindowController extends Stage {
         findNearbyStage.sizeToScene();
         findNearbyStage.showAndWait();
     }
-
 }

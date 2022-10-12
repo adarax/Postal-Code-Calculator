@@ -6,6 +6,7 @@ package edu.vanier.controllers;
 
 import edu.vanier.models.PostalCode;
 import java.util.HashMap;
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -55,6 +56,7 @@ public class NearbyWindowController extends Stage {
             PCController pcController = new PCController("/data/zipcodes.csv");
             
             try {
+                //-- Collect then cleanse data to avoid errors with the HashMap
                 String startPoint = pc_input_field.getText().toUpperCase().trim();
                 double radius = Double.parseDouble(radius_input_field.getText());
                 if (radius <= 0) {
@@ -74,12 +76,18 @@ public class NearbyWindowController extends Stage {
         });
     }
     
+    /**
+     * Handles the display of nearby locations using TableView
+     * @param searchResults
+     * @param radius
+     * @param startPoint 
+     */
     public void displayTableView(HashMap<String, PostalCode> searchResults, double radius, String startPoint) {
         
         //-- TableView and Labels setup
         TableView<PostalCode> table = new TableView<>();
         
-        Label label = new Label(searchResults.size() + " locations within "
+        Label label = new Label(searchResults.size() + " locations found within "
             + radius + " km of " + startPoint + ":");
         label.setFont(new Font(18));
         
@@ -133,5 +141,13 @@ public class NearbyWindowController extends Stage {
         this.setResizable(false);
         this.setScene(scene);
         this.show();
+        
+        //-- Part of the requirements was to display the nearby locations as log messages
+        System.out.println(searchResults.size() + " locations found within "
+            + radius + " km of " + startPoint + ":");
+        
+        for (Map.Entry<String, PostalCode> entry : searchResults.entrySet()) {
+            System.out.println(entry.getValue());
+        }
     }
 }

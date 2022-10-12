@@ -29,7 +29,7 @@ public class PCController {
     
    /** 
     * The key in the HashMap is the postal code of its value
-    * @return HashMap<String, PostalCode object>
+    * @return HashMap<String, PostalCode>
     */
     public final HashMap<String, PostalCode> parse() {
         
@@ -74,7 +74,9 @@ public class PCController {
     
     
    /** 
-    * Takes two postal codes, finds corresponding coordinates, converts to rads
+    * Takes two postal codes as arguments
+    * Finds corresponding coordinates
+    * Converts coordinates to radians
     * Uses Haversine formula
     * @param from
     * @param to

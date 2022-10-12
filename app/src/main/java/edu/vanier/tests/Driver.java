@@ -25,13 +25,21 @@ public class Driver {
     
     public void main() {
         testParse("/data/zipcodes.csv");
-//        testDistanceTo("H4R", "H3X");
+        testDistanceTo("H4R", "H3X");
+        
+        //-- To add values to the postalCodes HashMap so that
+        //   testNearbyLocations can be used without having to add
+        //   return values to the other test methods
         pcController = new PCController("/data/zipcodes.csv");
-        pcController.parse(); // To fill the postalCodes HashMap
-                              // so that testNearbyLocations can be used
+        pcController.parse();
+        
         testNearbyLocations("H3X", 100);
     }
     
+    /**
+     * 
+     * @param filePath 
+     */
     public void testParse(String filePath) {
         try {
             String csvPath = getClass().getResource(filePath).getPath();
@@ -71,7 +79,12 @@ public class Driver {
          
     }
     
-    //-- @return distance between points in kilometers, double
+    /**
+     * Displays distance between points in kilometers as a double
+     * 
+     * @param from
+     * @param to 
+     */
     public void testDistanceTo(String from, String to) {
         
         int radiusOfEarth = 6371;
@@ -95,8 +108,12 @@ public class Driver {
         System.out.println((double) Math.round(dist * 100) / 100 + "km");
     }
     
-    
-    //-- @return nearby locations, HashMap<String, PostalCode>
+    /**
+     * Displays nearby locations via a HashMap<String, PostalCode>
+     * 
+     * @param from
+     * @param radius 
+     */
     public void testNearbyLocations(String from, double radius) {
         
         //-- Nearby PostalCode objects (within 100km)
@@ -110,5 +127,5 @@ public class Driver {
         
         System.out.println(nearbyLocations);
     }
-    
 }
+    

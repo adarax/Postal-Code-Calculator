@@ -32,19 +32,26 @@ public class DistanceWindowController extends Stage {
             PCController pcController = new PCController("/data/zipcodes.csv");
             
             try {
+                //-- Collect then cleanse data to avoid errors with HashMap
                 String startPoint = start_field.getText().toUpperCase().trim();
                 String endPoint = end_field.getText().toUpperCase().trim();
+                
+                //-- Compute distance
                 double distance = pcController.distanceTo(startPoint, endPoint);
                 
+                //-- Erase any previous error messages
                 error_message.setText("");
+                
+                //-- Format Alert dialog box
                 Alert resultDialog = new Alert(Alert.AlertType.INFORMATION);
-                resultDialog.setTitle("Computed distance");
+                resultDialog.setTitle("Result");
                 resultDialog.setHeaderText("");
                 resultDialog.setContentText("Distance is " + distance + " KM");
                 resultDialog.showAndWait();
             }
             catch (Exception ex) {
-                error_message.setText("Invalid postal code, please retry."
+                //-- Display error message in the dialog box
+                error_message.setText("One or both of these postal codes is invalid, please retry."
                     + "\nTip: Enter only the first 3 characters of the postal code");
             }
             

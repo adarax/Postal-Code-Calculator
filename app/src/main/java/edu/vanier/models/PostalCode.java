@@ -13,7 +13,17 @@ public class PostalCode {
     private String country, postalCode, province;
     private double latitude, longitude;
     
-
+    
+    /**
+     * Constructor for PostalCode objects includes all data collected from 
+       the CSV file apart from city. City was not always possible to retrieve.
+     * @param id
+     * @param country
+     * @param postalCode
+     * @param province
+     * @param latitude
+     * @param longitude 
+     */
     public PostalCode(int id, String country, String postalCode, String province, double latitude, double longitude) {
         this.id = id;
         this.country = country;

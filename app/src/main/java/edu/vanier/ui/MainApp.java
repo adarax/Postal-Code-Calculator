@@ -16,9 +16,6 @@ import javafx.stage.Stage;
  */
 public class MainApp extends Application {
     
-    //-- TODO: Make comments into proper Javadoc comments
-    //-- For all action items: ctrl + 6
-    
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main_window.fxml"));
