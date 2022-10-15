@@ -71,10 +71,7 @@ public class Driver {
             
         }
         catch (CsvValidationException | IOException e) {
-            System.out.println("""
-                               Something went wrong with the CSV file.
-                               Suggestion: Check the filePath.
-                               """);
+            System.out.println("Something went wrong with the CSV file.\nSuggestion: Check the filePath.");
         }
          
     }
